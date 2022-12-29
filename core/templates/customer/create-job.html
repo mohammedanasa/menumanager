@@ -1,0 +1,92 @@
+{% extends 'customer/base.html' %}
+{% load bootstrap4 %}
+
+{% block head %}
+<style>
+    #pills-tab a{
+        color:black;
+    }
+    
+    #pills-tab a:hover {
+        color: orange;
+        text-decoration: none;
+    }
+
+    #pills-tab a.active {
+        color: orange;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Side -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    JOB SUMMARY
+                </div>
+                <div class="card-body">
+                    <p>A Summary of your job informations will appear here.</p>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Right Side -->
+        <div class="col-lg-8">
+            <!-- Step Tabs -->
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ul class="nav nav-pills nav-justified align-items-center mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <a class="active" id="pills-info-tab" data-toggle="pill" href="#pills-info" role="tab" aria-controls="pills-info" aria-selected="true">Item Info</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item" role="presentation">
+                          <a id="pills-pickup-tab" data-toggle="pill" href="#pills-pickup" role="tab" aria-controls="pills-pickup" aria-selected="false">Pick Up</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item" role="presentation">
+                          <a id="pills-delivery-tab" data-toggle="pill" href="#pills-delivery" role="tab" aria-controls="pills-delivery" aria-selected="false">Delivery</a>
+                        </li>
+                        <i class="fas fa-chevron-right"></i>
+                        <li class="nav-item" role="presentation">
+                            <a id="pills-payment-tab" data-toggle="pill" href="#pills-payment" role="tab" aria-controls="pills-payment" aria-selected="false">Payment</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Step forms -->
+            <b>CREATE A JOB</b>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+                    <h1>Item Info</h1>
+                    <form method="POST" enctype="multipart/form-data">
+                        <b class="text-secondary">Item Information</b>
+                        <div class="card bg-white mt-2 mb-5">
+                            <div class="card-body">
+                                {% csrf_token %}
+                                {% bootstrap_form step1_form %}
+                            </div>
+                        </div>
+                        <input type="hidden" name="step" value="1">
+                        <button type="submit" class="btn btn-warning">Save & Continue</button>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="pills-pickup" role="tabpanel" aria-labelledby="pills-pickup-tab">
+                    <h1>Pick Up</h1>
+                </div>
+                <div class="tab-pane fade" id="pills-delivery" role="tabpanel" aria-labelledby="pills-delivery-tab">
+                    <h1>Delivery</h1>
+                </div>
+                <div class="tab-pane fade" id="pills-payment" role="tabpanel" aria-labelledby="pills-payment-tab">
+                    <h1>Payment</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

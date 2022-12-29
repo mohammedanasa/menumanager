@@ -106,3 +106,20 @@ def payment_method_page(request):
         })
     else:
         return render(request,'customer/payment-method.html')
+
+@login_required(login_url="/sign-in/?next=/customer/")
+def create_job_page(request):
+    current_customer = request.user.customer
+
+    if not request.user.customer.stripe_payment_method_id:
+        return redirect(reverse('customer:payment-method'))
+
+    
+
+    #return render(request,'customer/create-job.html')
+
+    step1_form = forms.JobCreateStep1Form()
+    return render(request, 'customer/create-job.html',{
+        "step1_form":step1_form
+    })
+

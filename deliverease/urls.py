@@ -13,6 +13,7 @@ customer_urlpatterns = [
     path('',customer_views.home, name='home'),
     path('profile/', customer_views.profile_page, name='profile'),
     path('payment-method/', customer_views.payment_method_page, name='payment-method'),
+    path('create-job/', customer_views.create_job_page, name='create-job'),
 
     
 ]
