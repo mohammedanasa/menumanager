@@ -152,3 +152,6 @@ DEFAULT_FROM_EMAIL = 'DeliverEase <no-reply@deliverease.localhost>'
 
 FIREBASE_ADMIN_CREDENTIALS = os.path.join(BASE_DIR,"deliverese-50037-firebase-adminsdk-tha66-b14051864a.json")
 
+STRIPE_API_PUBLIC_KEY = "pk_test_mKgpSc1D9I8x6QKp6Oh341Aj009VNiy1YG"
+STRIPE_API_SECRET_KEY = "sk_test_51FB1VbCvaykZG6AdCppjKupl3QNll13rRRuRzXsXHatQ8bSLjpMwvsHpZARHdj1N54bux0v7Jp1djMOuUOlPT43V00cbPl3pWW" 
+
