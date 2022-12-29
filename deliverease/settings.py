@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.ProfileMiddleware',
 ]
 
 ROOT_URLCONF = 'deliverease.urls'
@@ -123,6 +125,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 LOGIN_URL = '/sign-in'
 LOGIN_REDIRECT_URL = '/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -144,4 +149,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.freesmtpservers.com'
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = 'DeliverEase <no-reply@deliverease.localhost>'
+
+FIREBASE_ADMIN_CREDENTIALS = os.path.join(BASE_DIR,"deliverese-50037-firebase-adminsdk-tha66-b14051864a.json")
 
