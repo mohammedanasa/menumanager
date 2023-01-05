@@ -12,6 +12,7 @@ social-auth-app-django = "==4.0.0"
 pillow = "*"
 firebase-admin = "==4.4.0"
 stripe = "==2.55.1"
+django-debug-toolbar = "*"
 
 [dev-packages]
 

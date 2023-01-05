@@ -116,8 +116,8 @@ defer></script>
 <div class="d-flex flex-column h-100" style="padding-bottom:60px">
     <div class="text-center">
         <div class="btn-group mt-1 mb-1 align-item-center" role="group">
-            <a href="" class="btn btn-warning">Current Job</a>
-            <a href="" class="btn btn-outline-warning">Archived Jobs</a>
+            <a href="{% url 'courier:current-job' %}" class="btn btn-warning">Current Job</a>
+            <a href="{% url 'courier:archived-jobs' %}" class="btn btn-outline-warning">Archived Jobs</a>
 
         </div>
     </div>
@@ -155,7 +155,11 @@ defer></script>
                 </div>
             </div>
             <a href="{% url 'courier:current-job-take-photo' job.id %}" class="btn btn-block btn-warning btn-md mt-2">
+                {% if job.status == 'picking' %}
                 Pickup
+                {% else %}
+                Drop Off
+                {% endif %}
             </a>
         </div>
     </div>

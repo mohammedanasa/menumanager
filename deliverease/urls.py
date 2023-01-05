@@ -1,5 +1,6 @@
 
 from django.contrib import admin
+import debug_toolbar
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -31,6 +32,11 @@ courier_urlpatterns = [
     path('jobs/available/<id>/',courier_views.available_job_page, name='available-job'),
     path('jobs/current/', courier_views.current_job_page, name='current-job'),
     path('jobs/current/<id>/take-photo/', courier_views.current_job_take_photo_page, name='current-job-take-photo'),
+    path('jobs/complete/', courier_views.job_complete_page, name='job-complete'),
+    path('jobs/archived/', courier_views.archived_jobs_page, name='archived-jobs'),
+    path('profile/', courier_views.profile_page, name='profile'),
+
+
 
 
     path('api/jobs/available/',courier_apis.available_jobs_api, name="available-jobs-api"),
@@ -52,6 +58,8 @@ urlpatterns = [
 
     path('customer/', include((customer_urlpatterns, 'customer'))),
     path('courier/',include((courier_urlpatterns, 'courier'))),
+
+    path('__debug__/', include(debug_toolbar.urls)),
     
 ]
 
