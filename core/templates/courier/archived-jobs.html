@@ -29,7 +29,7 @@
 
     {% for job in jobs %}
 
-    <div class="card mt-2 ml-2 mr-2" style="border-color: #ffc107">
+    <div class="card mt-2 ml-2 mr-2" style="border:1px solid rgba(0,0,0,.125)">
         <div class="card-body p-2">
             <div class="media">
                 <img src="{{ job.photo.url }}" class="rounded-lg mr-3" width="50" height="50">
@@ -64,7 +64,7 @@
     
     {% else %}
 
-    <div id="main" class="text-center">
+    <div id="main" class="text-center align-middle">
         <p>You have no job now. Let's pick a new one!</p>
     </div>
     

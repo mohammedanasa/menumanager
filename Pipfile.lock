@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "312ed6062d2335ef5d48deee7674dc846225cb205073f2ba76be40cf7dd062dd"
+            "sha256": "5893c004365c58f43259e3e46d1d19a0749cafacb77f1692c7bb2feda0622241"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -359,11 +359,11 @@
         },
         "googleapis-common-protos": {
             "hashes": [
-                "sha256:27a849d6205838fb6cc3c1c21cb9800707a661bb21c6ce7fb13e99eb1f8a0c46",
-                "sha256:a9f4a1d7f6d9809657b7f1316a1aa527f6664891531bcfcc13b6696e685f443c"
+                "sha256:2672d6b3a7b6188b70a5a4c70def7ddbb9000852dfbf49daf52fc7306c09db0c",
+                "sha256:e877f2f041b640b4888b6917dde4f44515ab938bf744c4dbc06f11f0e8ed56b5"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.57.0"
+            "version": "==1.57.1"
         },
         "grpcio": {
             "hashes": [
@@ -502,6 +502,13 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==3.2.2"
+        },
+        "paypalrestsdk": {
+            "hashes": [
+                "sha256:238713208031e8981bf70b3350b3d7f85ed64d34e0f21e4c1184444a546fee7f"
+            ],
+            "index": "pypi",
+            "version": "==1.13.1"
         },
         "pillow": {
             "hashes": [
@@ -659,6 +666,14 @@
             "markers": "python_version >= '3.7'",
             "version": "==2.6.0"
         },
+        "pyopenssl": {
+            "hashes": [
+                "sha256:c1cc5f86bcacefc84dada7d31175cae1b1518d5f60d3d0bb595a67822a868a6f",
+                "sha256:df5fc28af899e74e19fccb5510df423581047e10ab6f1f4ba1763ff5fde844c0"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==23.0.0"
+        },
         "pyparsing": {
             "hashes": [
                 "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb",
@@ -686,7 +701,7 @@
                 "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983",
                 "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"
             ],
-            "markers": "python_version >= '3.0'",
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
             "version": "==2.28.1"
         },
         "requests-oauthlib": {

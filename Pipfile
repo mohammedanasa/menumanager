@@ -13,6 +13,7 @@ pillow = "*"
 firebase-admin = "==4.4.0"
 stripe = "==2.55.1"
 django-debug-toolbar = "*"
+paypalrestsdk = "==1.13.1"
 
 [dev-packages]
 
