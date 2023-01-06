@@ -1,6 +1,7 @@
 import requests
 import stripe
 import firebase_admin
+from firebase_admin import credentials,auth,messaging
 from firebase_admin import credentials,auth
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
@@ -11,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.conf import settings
-from core.models import Job, Transaction
+from core.models import Job, Transaction,Courier
 
 
 # Create your views here.
@@ -203,6 +204,32 @@ def create_job_page(request):
 
                     creating_job.status = Job.PROCESSING_STATUS
                     creating_job.save()
+
+                    #Send push notification to all couriers
+                    couriers = Courier.objects.all()
+                    registration_tokens = [i.fcm_token for i in couriers if i.fcm_token]
+                    message = messaging.MulticastMessage(
+                        notification = messaging.Notification(
+                            title = creating_job.name,
+                            body = creating_job.description,
+
+                        ),
+                        webpush = messaging.WebpushConfig(
+                            notification = messaging.WebpushNotification(
+                                icon = creating_job.photo.url,
+                            ),
+                            fcm_options = messaging.WebpushFCMOptions(
+                                link= settings.NOTIFICATION_URL + reverse('courier:available-jobs'),
+                            ),
+                        ),
+                        tokens = registration_tokens
+                    )
+
+                    response = messaging.send_multicast(message)
+                    print('{0} messages were send succesfully.'.format(response.success_count))
+
+
+
 
                     return redirect(reverse('customer:home'))
                 except stripe.error.CardError as e:

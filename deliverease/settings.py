@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-bq#r!m9=mi_)2$rs3f&)%as1wjs-98+90h7pi_xw2%gkm8ej!y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'social_django',
     'debug_toolbar',
+    'channels',
 ]
 
 INTERNAL_IPS = [
@@ -168,3 +169,7 @@ GOOGLE_MAP_API_KEY = "AIzaSyBt6ETBkvMQG3jg46Yg_Iz411mDniM9zv8"
 PAYPAL_MODE = "sandbox"
 PAYPAL_CLIENT_ID = "AVbkQY95xkovN9g6wnR0tC8-T-aVYN4dbmT1QCLOaMgvjKeI7qW2FvphZX0So8_B5Ok9qqGNI8_IOf_h"
 PAYPAL_CLIENT_SECRET = "EE0VZykQi07VQ1YC7QJ5MrXzssKBoj6vAV4o8leDK69GqawPdc9J7sC4W_9a0pf69JJO-s0GlxPbDc_q"
+
+
+NOTIFICATION_URL = "https://9f88-2a00-23c7-ae03-1301-d09-f68c-14f5-bec3.eu.ngrok.io/"
+ASGI_APPLICATION = 'deliverease.asgi.application'
