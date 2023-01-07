@@ -172,4 +172,13 @@ PAYPAL_CLIENT_SECRET = "EE0VZykQi07VQ1YC7QJ5MrXzssKBoj6vAV4o8leDK69GqawPdc9J7sC4
 
 
 NOTIFICATION_URL = "https://9f88-2a00-23c7-ae03-1301-d09-f68c-14f5-bec3.eu.ngrok.io/"
-ASGI_APPLICATION = 'deliverease.asgi.application'
+ASGI_APPLICATION = "deliverease.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

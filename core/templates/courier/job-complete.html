@@ -1,10 +1,13 @@
 {% extends 'courier/base.html' %}
+{% block head %}
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+{% endblock %}
 {% load static %}
 
 {% block content %}
 
 <div class="h-100 d-flex flex-column align-items-center justify-content-center">
-    <img src="{% static 'img/complete.gif' %}" alt="" class="mb-3" height="200" width="200">
+    <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_w5oe9omf.json"  background="transparent"  speed="1"  style="width: 150px; height: 150px;" autoplay></lottie-player>
     <p>Your job was completed. Well done.</p>
 
     <a href="{% url 'courier:home' %}" class="btn btn-warning">Check Available Jobs</a>
