@@ -171,7 +171,7 @@ PAYPAL_CLIENT_ID = "AVbkQY95xkovN9g6wnR0tC8-T-aVYN4dbmT1QCLOaMgvjKeI7qW2FvphZX0S
 PAYPAL_CLIENT_SECRET = "EE0VZykQi07VQ1YC7QJ5MrXzssKBoj6vAV4o8leDK69GqawPdc9J7sC4W_9a0pf69JJO-s0GlxPbDc_q"
 
 
-NOTIFICATION_URL = "https://9f88-2a00-23c7-ae03-1301-d09-f68c-14f5-bec3.eu.ngrok.io/"
+NOTIFICATION_URL = "https://damp-stream-76185.herokuapp.com/"
 ASGI_APPLICATION = "deliverease.asgi.application"
 
 CHANNEL_LAYERS = {
@@ -182,3 +182,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+#Activate django heroku
+import django_on_heroku
+django_on_heroku.settings(locals())

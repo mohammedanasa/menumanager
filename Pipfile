@@ -76,6 +76,8 @@ async-timeout = "==4.0.2"
 google-api-core = {version = "==1.34.0", extras = ["grpc"]}
 hiredis = "==2.1.0"
 twisted = {version = "==22.10.0", extras = ["tls"]}
+gunicorn = "==20.0.4"
+django-on-heroku = "==1.1.2"
 
 [dev-packages]
 
