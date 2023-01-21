@@ -22,6 +22,9 @@ firebase_admin.initialize_app(cred)
 stripe.api_key = settings.STRIPE_API_SECRET_KEY
 
 @login_required()
+def customerHome(request):
+    return render(request,'customer/choose-service.html')
+
 def home(request):
     return redirect(reverse('customer:profile'))
     

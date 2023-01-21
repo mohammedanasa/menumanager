@@ -78,6 +78,9 @@ hiredis = "==2.1.0"
 twisted = {version = "==22.10.0", extras = ["tls"]}
 gunicorn = "==20.0.4"
 django-on-heroku = "==1.1.2"
+dj-database-url = "==1.2.0"
+psycopg2-binary = "==2.9.5"
+whitenoise = "==6.3.0"
 
 [dev-packages]
 
