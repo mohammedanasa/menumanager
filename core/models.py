@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -32,11 +33,15 @@ class Courier(models.Model):
 
 
 class Category(models.Model):
-    slug = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250)  
+    slug = models.CharField(max_length=250, unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.category_name)
+        super(Category, self).save(*args, **kwargs)
 
 class Job(models.Model):
     SMALL_SIZE = "small"

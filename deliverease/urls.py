@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 from core import views, consumers
 from django.views.generic import TemplateView
 
+from restaurant import views as restaurant_views
 from core.customer import views as customer_views
 from core.courier import views as courier_views, apis as courier_apis
 
@@ -19,12 +20,7 @@ customer_urlpatterns = [
 
     path('jobs/current/', customer_views.current_jobs_page, name='current-jobs'),
     path('jobs/archived/', customer_views.archived_jobs_page, name='archived-jobs'),
-    path('jobs/<job_id>/', customer_views.job_page, name='job'),
-
-
-
-
-    
+    path('jobs/<job_id>/', customer_views.job_page, name='job'),    
 ]
 
 courier_urlpatterns = [
@@ -44,6 +40,33 @@ courier_urlpatterns = [
 ]
 
 
+restaurant_urlpatterns = [
+    path("", restaurant_views.dashboard, name="rest-dashboard"),
+
+    path('product/', restaurant_views.ProductCreate.as_view(), name='create-product'),
+    path('products/', restaurant_views.ProductList.as_view(), name='products'),
+    path('product/<slug>/', restaurant_views.ProductUpdate.as_view(), name='update-product'),
+    path('products/delete-product/<slug>/', restaurant_views.ProductDelete.as_view(), name='delete-product'),
+
+    path('categories/', restaurant_views.CategoryList.as_view(), name='categories'),
+    path('category/', restaurant_views.CategoryCreate.as_view(), name='create-category'),
+    path('category/<slug>/', restaurant_views.CategoryUpdate.as_view(), name='update-category'),
+    path('categories/delete-category/<slug>/', restaurant_views.CategoryDelete.as_view(), name='delete-category'),
+
+    path('modifier-groups/', restaurant_views.MGList.as_view(), name='mgs'),
+    path('modifier-group/', restaurant_views.MGCreate.as_view(), name='create-mg'),
+    path('modifier-group/<slug>/', restaurant_views.MGUpdate.as_view(), name='update-mg'),
+    path('modifier-group/delete-modifier-group/<slug>/', restaurant_views.MGDelete.as_view(), name='delete-mg'),
+
+    path('modifiers/', restaurant_views.ModifierList.as_view(), name='modifiers'),
+    path('modifier/', restaurant_views.ModifierCreate.as_view(), name='create-modifier'),
+    path('modifier/<slug>/', restaurant_views.ModifierUpdate.as_view(), name='update-modifier'),
+    path('modifier/delete-modifier/<slug>/', restaurant_views.ModifierDelete.as_view(), name='delete-modifier'),
+
+
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('social_django.urls', namespace='social')),
@@ -57,6 +80,7 @@ urlpatterns = [
 
     path('customer/', include((customer_urlpatterns, 'customer'))),
     path('courier/',include((courier_urlpatterns, 'courier'))),
+    path('restaurant/',include((restaurant_urlpatterns,'restaurant'))),
 
     path('__debug__/', include(debug_toolbar.urls)),
     
