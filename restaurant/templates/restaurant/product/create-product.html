@@ -172,7 +172,7 @@
                                 <div class="card-body text-center pt-0">
                                     <!--begin::Image input-->
                                     <!--begin::Image input placeholder-->
-                                    <style>.image-input-placeholder { background-image: url({% if product.photo %}'{{product.image.url}}'{%else%}'{% static 'assets/media/svg/files/blank-image.svg' %}'{%endif%}); } [data-theme="dark"] .image-input-placeholder { background-image: url('assets/media/svg/files/blank-image-dark.svg'); }</style>
+                                    <style>.image-input-placeholder { background-image: url('{{product.photo_url}}'); } [data-theme="dark"] .image-input-placeholder { background-image: url('assets/media/svg/files/blank-image-dark.svg'); }</style>
                                     <!--end::Image input placeholder-->
                                     <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3" data-kt-image-input="true" style="&lt;br /&gt; &lt;b&gt;Warning&lt;/b&gt;: Undefined variable $imageBg in &lt;b&gt;C:\wamp64\www\keenthemes\core\html\dist\view\pages\apps\ecommerce\catalog\edit-product\_thumbnail.php&lt;/b&gt; on line &lt;b&gt;30&lt;/b&gt;&lt;br /&gt;">
                                         <!--begin::Preview existing avatar-->
@@ -316,24 +316,6 @@
                                 <!--end::Card body-->
                             </div>
                             <!--end::Category & tags-->
-                            <!--begin::Weekly sales-->
-                            <div class="card card-flush py-4">
-                                <!--begin::Card header-->
-                                <div class="card-header">
-                                    <!--begin::Card title-->
-                                    <div class="card-title">
-                                        <h2>Weekly Sales</h2>
-                                    </div>
-                                    <!--end::Card title-->
-                                </div>
-                                <!--end::Card header-->
-                                <!--begin::Card body-->
-                                <div class="card-body pt-0">
-                                    <span class="text-muted">No data available. Sales data will begin capturing once product has been published.</span>
-                                </div>
-                                <!--end::Card body-->
-                            </div>
-                            <!--end::Weekly sales-->
                             <!--begin::Template settings-->
                             <!--end::Template settings-->
                         </div>

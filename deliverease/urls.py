@@ -43,15 +43,15 @@ courier_urlpatterns = [
 restaurant_urlpatterns = [
     path("", restaurant_views.dashboard, name="rest-dashboard"),
 
-    path('product/', restaurant_views.ProductCreate.as_view(), name='create-product'),
+    path('product/', restaurant_views.create_or_update_product, name='create-product'),
     path('products/', restaurant_views.ProductList.as_view(), name='products'),
-    path('product/<slug>/', restaurant_views.ProductUpdate.as_view(), name='update-product'),
-    path('products/delete-product/<slug>/', restaurant_views.ProductDelete.as_view(), name='delete-product'),
+    path('product/<slug:pid>/', restaurant_views.create_or_update_product, name='update-product'),
+    path('product/delete-product/<slug:pid>/', restaurant_views.delete_product, name='delete-product'),
 
     path('categories/', restaurant_views.CategoryList.as_view(), name='categories'),
-    path('category/', restaurant_views.CategoryCreate.as_view(), name='create-category'),
-    path('category/<slug>/', restaurant_views.CategoryUpdate.as_view(), name='update-category'),
-    path('categories/delete-category/<slug>/', restaurant_views.CategoryDelete.as_view(), name='delete-category'),
+    path('category/', restaurant_views.create_or_update_category, name='create-category'),
+    path('category/<slug:cid>/', restaurant_views.create_or_update_category, name='update-category'),
+    path('category/delete-category/<slug:cid>/', restaurant_views.delete_category, name='delete-category'),
 
     path('modifier-groups/', restaurant_views.MGList.as_view(), name='mgs'),
     path('modifier-group/', restaurant_views.MGCreate.as_view(), name='create-mg'),
