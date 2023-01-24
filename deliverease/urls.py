@@ -8,23 +8,26 @@ from django.conf.urls.static import static
 from core import views, consumers
 from django.views.generic import TemplateView
 
+from restaurant import views as restaurant_views
+from accounts import views as api_auth_views
+from api import views as api_endpoint_views
 from core.customer import views as customer_views
 from core.courier import views as courier_views, apis as courier_apis
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 customer_urlpatterns = [
-    path('',customer_views.home, name='home'),
+    path('',customer_views.customerHome, name='dashboard'),
     path('profile/', customer_views.profile_page, name='profile'),
     path('payment-method/', customer_views.payment_method_page, name='payment-method'),
     path('create-job/', customer_views.create_job_page, name='create-job'),
 
     path('jobs/current/', customer_views.current_jobs_page, name='current-jobs'),
     path('jobs/archived/', customer_views.archived_jobs_page, name='archived-jobs'),
-    path('jobs/<job_id>/', customer_views.job_page, name='job'),
-
-
-
-
-    
+    path('jobs/<job_id>/', customer_views.job_page, name='job'),    
 ]
 
 courier_urlpatterns = [
@@ -44,6 +47,49 @@ courier_urlpatterns = [
 ]
 
 
+restaurant_urlpatterns = [
+    path("", restaurant_views.dashboard, name="rest-dashboard"),
+
+    path('product/', restaurant_views.create_or_update_product, name='create-product'),
+    path('products/', restaurant_views.ProductList.as_view(), name='products'),
+    path('product/<slug:pid>/', restaurant_views.create_or_update_product, name='update-product'),
+    path('product/delete-product/<slug:pid>/', restaurant_views.delete_product, name='delete-product'),
+
+    path('categories/', restaurant_views.CategoryList.as_view(), name='categories'),
+    path('category/', restaurant_views.create_or_update_category, name='create-category'),
+    path('category/<slug:cid>/', restaurant_views.create_or_update_category, name='update-category'),
+    path('category/delete-category/<slug:cid>/', restaurant_views.delete_category, name='delete-category'),
+
+    path('modifier-groups/', restaurant_views.MGList.as_view(), name='mgs'),
+    path('modifier-group/', restaurant_views.MGCreate.as_view(), name='create-mg'),
+    path('modifier-group/<slug>/', restaurant_views.MGUpdate.as_view(), name='update-mg'),
+    path('modifier-group/delete-modifier-group/<slug>/', restaurant_views.MGDelete.as_view(), name='delete-mg'),
+
+    path('modifiers/', restaurant_views.ModifierList.as_view(), name='modifiers'),
+    path('modifier/', restaurant_views.ModifierCreate.as_view(), name='create-modifier'),
+    path('modifier/<slug>/', restaurant_views.ModifierUpdate.as_view(), name='update-modifier'),
+    path('modifier/delete-modifier/<slug>/', restaurant_views.ModifierDelete.as_view(), name='delete-modifier'),
+
+
+]
+
+api_urlpatterns = [
+
+    path("auth/signup/", api_auth_views.SignUpView.as_view(),name="signupapi"),
+    path("auth/signin/", api_auth_views.LoginViewAPI.as_view(),name="lognapi"),
+    path("auth/jwt/create/", TokenObtainPairView.as_view(),name="jwt"),
+    path("auth/jwt/refresh/", TokenRefreshView.as_view(),name="jwtrefresh"),
+    path("auth/jwt/verify/", TokenVerifyView.as_view(),name="jwtverify"),
+
+    path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"),  
+
+
+
+
+
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('social_django.urls', namespace='social')),
@@ -57,6 +103,9 @@ urlpatterns = [
 
     path('customer/', include((customer_urlpatterns, 'customer'))),
     path('courier/',include((courier_urlpatterns, 'courier'))),
+    path('restaurant/',include((restaurant_urlpatterns,'restaurant'))),
+    path('api/', include((api_urlpatterns, 'api'))),
+
 
     path('__debug__/', include(debug_toolbar.urls)),
     
