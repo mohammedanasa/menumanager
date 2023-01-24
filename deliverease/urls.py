@@ -9,8 +9,15 @@ from core import views, consumers
 from django.views.generic import TemplateView
 
 from restaurant import views as restaurant_views
+from accounts import views as api_auth_views
+from api import views as api_endpoint_views
 from core.customer import views as customer_views
 from core.courier import views as courier_views, apis as courier_apis
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 customer_urlpatterns = [
     path('',customer_views.customerHome, name='dashboard'),
@@ -66,6 +73,22 @@ restaurant_urlpatterns = [
 
 ]
 
+api_urlpatterns = [
+
+    path("auth/signup/", api_auth_views.SignUpView.as_view(),name="signupapi"),
+    path("auth/signin/", api_auth_views.LoginViewAPI.as_view(),name="lognapi"),
+    path("auth/jwt/create/", TokenObtainPairView.as_view(),name="jwt"),
+    path("auth/jwt/refresh/", TokenRefreshView.as_view(),name="jwtrefresh"),
+    path("auth/jwt/verify/", TokenVerifyView.as_view(),name="jwtverify"),
+
+    path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"),  
+
+
+
+
+
+]
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -81,6 +104,8 @@ urlpatterns = [
     path('customer/', include((customer_urlpatterns, 'customer'))),
     path('courier/',include((courier_urlpatterns, 'courier'))),
     path('restaurant/',include((restaurant_urlpatterns,'restaurant'))),
+    path('api/', include((api_urlpatterns, 'api'))),
+
 
     path('__debug__/', include(debug_toolbar.urls)),
     

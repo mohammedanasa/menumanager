@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -8,7 +8,7 @@ from django.utils.text import slugify
 # Create your models here.
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
     avatar = models.ImageField(upload_to='customer/avatars', blank=True, null=True)
     phone_number = models.CharField(max_length=50, blank=True)
     stripe_customer_id = models.CharField(max_length=255,blank=True)    
@@ -19,7 +19,7 @@ class Customer(models.Model):
         return self.user.get_full_name()
 
 class Courier(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='courier')
     lat = models.FloatField(default=0)
     lng = models.FloatField(default=0)
 

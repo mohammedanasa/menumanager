@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from django.utils import timezone
 from core.models import Courier,Customer
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.utils.text import slugify
 
 
