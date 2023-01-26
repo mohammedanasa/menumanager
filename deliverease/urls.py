@@ -88,6 +88,8 @@ api_urlpatterns = [
 
     path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"), 
     path("current-user/",api_endpoint_views.get_posts_for_current_user , name="apicategorycurrentuser"),  
+    path("menu/",api_endpoint_views.MenuViewSet, name="apicategory"), 
+
 
 
 
@@ -114,9 +116,6 @@ urlpatterns = [
     path('api/', include((api_urlpatterns, 'api'))),
 
     #Test
-    path('testmenu1/',api_endpoint_views.LocationMenuCreateListView.as_view()),
-    path('testmenu1/<uuid:lid>/',api_endpoint_views.LocationMenuListView.as_view()),
-    path('testmenu2/',api_endpoint_views.list_menus),
     path('test/', include(router.urls)),
 
 

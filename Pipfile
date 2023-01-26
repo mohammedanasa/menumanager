@@ -82,6 +82,7 @@ dj-database-url = "==1.2.0"
 psycopg2-binary = "==2.9.5"
 whitenoise = "==6.3.0"
 djangorestframework-simplejwt = "*"
+drf-writable-nested = "*"
 
 [dev-packages]
 

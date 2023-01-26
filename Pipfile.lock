@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d4c648e2b86d9cafb3e2c7a9e6a1e857b5c2877cbb3a25c5ab7fa6cf8c057177"
+            "sha256": "7a8a589f14f3d67cabe591e05b03bbd03a59fc2dd8d6c6bea9e151e24f050329"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -312,6 +312,13 @@
             ],
             "index": "pypi",
             "version": "==5.2.2"
+        },
+        "drf-writable-nested": {
+            "hashes": [
+                "sha256:154c0381e8a3a477e0fd539d5e1caf8ff4c1097a9c0c0fe741d4858b11b0455b"
+            ],
+            "index": "pypi",
+            "version": "==0.7.0"
         },
         "firebase-admin": {
             "hashes": [

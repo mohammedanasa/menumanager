@@ -89,7 +89,7 @@ class Category(models.Model):
     cid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250)  
     description = models.TextField(max_length=255, blank=True, null=True)
-    product = models.ManyToManyField(Product, blank=True, null=True, related_name="categories")
+    product = models.ManyToManyField(Product, blank=True, null=True, related_name="catprods")
     slug = models.CharField(max_length=250, unique=True, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
