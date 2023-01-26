@@ -10,7 +10,7 @@ from rest_framework.permissions import (
 from rest_framework.request import Request
 from rest_framework.response import Response
 from restaurant.models import Category
-from api.serializer import CategorySerializer
+from api.serializer import CategorySerializer,CurrentUserCategorySerializer
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -45,9 +45,13 @@ class CategoryListCreateView(
 
     serializer_class = CategorySerializer
     pagination_class = CustomPaginator
+    permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
 
-    
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(owner=user)
+        return super().perform_create(serializer)
 
     def get(self, request: Request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -73,3 +77,14 @@ class PostRetrieveUpdateDeleteView(
 
     def delete(self, request: Request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+
+@api_view(http_method_names=["GET"])
+@permission_classes([IsAuthenticated])
+def get_posts_for_current_user(request: Request):
+    user = request.user
+
+    serializer = CurrentUserCategorySerializer(instance=user, context={"request": request})
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)

@@ -81,7 +81,9 @@ api_urlpatterns = [
     path("auth/jwt/refresh/", TokenRefreshView.as_view(),name="jwtrefresh"),
     path("auth/jwt/verify/", TokenVerifyView.as_view(),name="jwtverify"),
 
-    path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"),  
+    path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"), 
+    path("current-user/",api_endpoint_views.get_posts_for_current_user , name="apicategorycurrentuser"),  
+
 
 
 

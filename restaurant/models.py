@@ -2,10 +2,10 @@ from django.db import models
 import uuid
 from django.utils import timezone
 from core.models import Courier,Customer
-from accounts.models import User
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 
-
+User = get_user_model()
 
 class Address(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -36,7 +36,7 @@ class Restaurant(models.Model):
 
 #Category Model
 class Category(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="categories")
     cid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=250)  
     description = models.TextField(max_length=255, blank=True, null=True)
