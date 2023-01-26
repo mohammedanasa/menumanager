@@ -1,6 +1,7 @@
 
 from django.contrib import admin
 import debug_toolbar
+
 from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -13,11 +14,15 @@ from accounts import views as api_auth_views
 from api import views as api_endpoint_views
 from core.customer import views as customer_views
 from core.courier import views as courier_views, apis as courier_apis
+from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView,
 )
+
+router = DefaultRouter()
+router.register(r'menus', api_endpoint_views.MenuViewSet, basename='menu')
 
 customer_urlpatterns = [
     path('',customer_views.customerHome, name='dashboard'),
@@ -107,6 +112,19 @@ urlpatterns = [
     path('courier/',include((courier_urlpatterns, 'courier'))),
     path('restaurant/',include((restaurant_urlpatterns,'restaurant'))),
     path('api/', include((api_urlpatterns, 'api'))),
+
+    #Test
+    path('testmenu1/',api_endpoint_views.LocationMenuCreateListView.as_view()),
+    path('testmenu1/<uuid:lid>/',api_endpoint_views.LocationMenuListView.as_view()),
+    path('testmenu2/',api_endpoint_views.list_menus),
+    path('test/', include(router.urls)),
+
+
+
+
+    
+
+
 
 
     path('__debug__/', include(debug_toolbar.urls)),
