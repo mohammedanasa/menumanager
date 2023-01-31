@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse,reverse_lazy
 from django.contrib.auth.decorators import login_required
 from restaurant.models import *
-from restaurant.forms import CategoryForm,ProductForm,ModifierGroupForm,ModifierForm
+from restaurant.forms import *
 
 
 
@@ -27,8 +27,9 @@ def create_or_update_product(request, pid=None):
         if form.is_valid():
             product = form.save(commit=False)
             product.owner = request.user
+            category = form.cleaned_data.get('category')
+            product.catprods.set(form.cleaned_data.get('category'))
             product.save()
-            form.save_m2m()
             messages.success(request, 'Product has been successfully saved')
             return redirect('restaurant:update-product',pid=product.pid)
     else:
@@ -164,14 +165,113 @@ class ModifierDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('restaurant:modifiers')
     template_name = 'restaurant/modifier/delete_modifier.html'
 
+#List all the restaurants
+def restaurant_list(request):
+    user = request.user
+    restaurants = Restaurant.objects.filter(owner=user)
+    context = {'restaurants': restaurants}
+    return render(request, 'restaurant/restaurant/restaurant-list.html', context)
+
+#Single restaurant view
+def get_restaurant(request, lid):
+    restaurant = get_object_or_404(Restaurant, lid=lid)
+    print(restaurant)
+    menus = Menu.objects.filter(restaurant=restaurant)
+    print(menus)
+    return render(request, 'restaurant/restaurant/menu-list.html', {'restaurant': restaurant,'menus':menus})
+
+#Display all the products & categories for the ACTIVE MENU under one location
+def restaurant_menus(request, lid):
+    restaurant = get_object_or_404(Restaurant, pk=lid)
+    print(restaurant)
+    menu = Menu.objects.get(restaurant=restaurant, is_active=True)
+    print(menu)
+    categories = Category.objects.filter(menu=menu)
+    print(categories)
+    categories_data = []
+    for category in categories:
+        products = Product.objects.filter(catprods=category)
+        category_data = {
+            'id': category.cid,
+            'name': category.name,
+            'products': [
+                {
+                    'id': product.pid,
+                    'name': product.name,
+                    'price': product.price,
+                } for product in products
+            ]
+        }
+        categories_data.append(category_data)
+        print(categories_data)
+    context = {'categories_data': categories_data}
     
+    return render(request, 'restaurant/store/demo.html', context )
+
+#Create menu for a single location
+def create_menu_location(request, lid):
+    restaurant = get_object_or_404(Restaurant, lid=lid)
+    if request.method == 'POST':
+        form = MenuForm(request.POST)
+        if form.is_valid():
+            menu = form.save(commit=False)
+            menu.owner = request.user
+            menu.save()
+            form.save_m2m()
+            restaurant.menu.add(menu)
+            return redirect('restaurant:restaurant', lid=restaurant.lid)
+    else:
+        form = MenuForm()
+    return render(request, 'restaurant/restaurant/menu/menu-form.html', {'form': form})
+
+#Update the menu for a single restaurant
+def update_menu(request, lid, menuid):
+    restaurant = get_object_or_404(Restaurant, lid=lid)
+    menu = get_object_or_404(Menu, menuid=menuid)
+
+    if request.method == 'POST':
+        form = MenuForm(request.POST, instance=menu)
+        if form.is_valid():
+            menu = form.save(commit=False)
+            menu.owner = request.user
+            menu.save()
+            form.save_m2m()
+            messages.success(request, 'Menu has been successfully saved')
+
+            return redirect('restaurant:restaurant', lid=restaurant.lid)
+    else:
+        form = MenuForm(instance=menu)
+
+    return render(request, 'restaurant/restaurant/menu/menu-form.html', {'form': form})
 
 
+#Single menu products and categories
+def menu_detail(request, menuid):
+    menu = get_object_or_404(Menu, pk=menuid)
+    categories = Category.objects.filter(menu=menu)
+    categories_data = []
+    for category in categories:
+        products = Product.objects.filter(catprods=category)
+        category_data = {
+            'id': category.cid,
+            'name': category.name,
+            'products': [
+                {
+                    'id': product.pid,
+                    'name': product.name,
+                    'price': product.price,
+                } for product in products
+            ]
+        }
+        categories_data.append(category_data)
+    context = {'categories_data': categories_data}
+    return render(request, 'restaurant/store/demo.html', context)
 
 
+def menu_list(request):
+    menus = Menu.objects.all()
+    return render(request, 'restaurant/restaurant/menu/menus.html', {'menus': menus})
 
 
-
-    
 
 

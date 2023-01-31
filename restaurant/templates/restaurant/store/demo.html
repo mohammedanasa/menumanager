@@ -1,0 +1,9 @@
+<h1>Categories and Products</h1>
+{% for category in categories_data %}
+    <h2>{{ category.name }}</h2>
+    <ul>
+        {% for product in category.products %}
+            <li>{{ product.name }} ({{ product.price }} dollars)</li>
+        {% endfor %}
+    </ul>
+{% endfor %}

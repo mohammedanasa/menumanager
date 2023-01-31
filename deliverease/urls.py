@@ -53,7 +53,7 @@ courier_urlpatterns = [
 
 
 restaurant_urlpatterns = [
-    path("", restaurant_views.dashboard, name="rest-dashboard"),
+    path("", restaurant_views.restaurant_list, name="rest-list"),
 
     path('product/', restaurant_views.create_or_update_product, name='create-product'),
     path('products/', restaurant_views.ProductList.as_view(), name='products'),
@@ -74,6 +74,23 @@ restaurant_urlpatterns = [
     path('modifier/', restaurant_views.ModifierCreate.as_view(), name='create-modifier'),
     path('modifier/<slug>/', restaurant_views.ModifierUpdate.as_view(), name='update-modifier'),
     path('modifier/delete-modifier/<slug>/', restaurant_views.ModifierDelete.as_view(), name='delete-modifier'),
+
+    path('<lid>/', restaurant_views.get_restaurant, name='restaurant'),
+
+    #Create menu for a location
+    path('<lid>/menu/', restaurant_views.create_menu_location, name='menu-location'),
+    #Update menu for a location
+    path('<lid>/<menuid>/update/', restaurant_views.update_menu, name='menu-update-location'),
+    path('menus/', restaurant_views.menu_list, name='all-menus'),
+
+
+    path('<lid>/store1/', restaurant_views.restaurant_menus, name='store-cm'),
+
+
+
+
+
+
 
 
 ]
@@ -102,7 +119,7 @@ api_urlpatterns = [
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('social_django.urls', namespace='social')),
-    path('',views.home),
+    path('',restaurant_views.dashboard),
     path('firebase-messaging-sw.js', (TemplateView.as_view(template_name="firebase-messaging-sw.js", content_type= "application/javascript",))),
 
 

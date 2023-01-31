@@ -112,6 +112,7 @@ class Menu(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=250,null=True, blank=True)
     category = models.ManyToManyField(Category, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
 
     
@@ -142,3 +143,4 @@ class Restaurant(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+

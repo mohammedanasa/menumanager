@@ -74,3 +74,13 @@ class ModifierForm(forms.ModelForm):
     class Meta:
         model = Modifier
         fields = ['name', 'price','modifiergroup',]
+
+class MenuForm(forms.ModelForm):
+    class Meta:
+        model = Menu
+        fields = ['name', 'description', 'category', 'is_active']
+
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple,required=False)
+    
