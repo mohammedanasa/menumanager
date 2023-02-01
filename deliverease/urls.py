@@ -53,7 +53,15 @@ courier_urlpatterns = [
 
 
 restaurant_urlpatterns = [
-    path("", restaurant_views.restaurant_list, name="rest-list"),
+    path('loc/', restaurant_views.restaurant_list, name="rest-list"),
+    path('loc/<lid>/', restaurant_views.get_restaurant, name='restaurant'),
+    #----------------------------------------TEST------------------------------------------#
+    #Create menu for a single restaurant
+    #path('loc/<lid>/menu/', restaurant_views.create_menu_location, name='menu-location'),
+    #Update menu for a location
+    #path('loc/<lid>/<menuid>/update/', restaurant_views.update_menu, name='menu-update-location'),
+
+    path('loc/<lid>/update_address/', restaurant_views.update_restaurant_address, name="update_address"),
 
     path('product/', restaurant_views.create_or_update_product, name='create-product'),
     path('products/', restaurant_views.ProductList.as_view(), name='products'),
@@ -75,20 +83,18 @@ restaurant_urlpatterns = [
     path('modifier/<slug>/', restaurant_views.ModifierUpdate.as_view(), name='update-modifier'),
     path('modifier/delete-modifier/<slug>/', restaurant_views.ModifierDelete.as_view(), name='delete-modifier'),
 
-    path('<lid>/', restaurant_views.get_restaurant, name='restaurant'),
+    #Menu Global
+    path('menus/', restaurant_views.menu_list_view, name='menu_list'),
+    path('menu/create/', restaurant_views.menu_create_view, name='menu_create'),
+    path('menu/<uuid:menuid>/update/', restaurant_views.menu_update_view, name='menu_update'),
+    
+    #Not working
 
+    #----------------------------------------TESTING---------------------------------------------------#
     #Create menu for a location
-    path('<lid>/menu/', restaurant_views.create_menu_location, name='menu-location'),
-    #Update menu for a location
-    path('<lid>/<menuid>/update/', restaurant_views.update_menu, name='menu-update-location'),
-    path('menus/', restaurant_views.menu_list, name='all-menus'),
-
-
-    path('<lid>/store1/', restaurant_views.restaurant_menus, name='store-cm'),
-
-
-
-
+    
+    #path('menus/', restaurant_views.menu_list, name='all-menus'),
+    #path('<lid>/store1/', restaurant_views.restaurant_menus, name='store-cm'),
 
 
 
@@ -134,6 +140,10 @@ urlpatterns = [
 
     #Test
     path('test/', include(router.urls)),
+    path('woo/',restaurant_views.fetch_products),
+
+    
+
 
 
 

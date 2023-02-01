@@ -212,7 +212,7 @@
                                 <!--begin::Actions-->
                                 <div class="d-flex my-4">
                                     
-                                    <a href="{% url 'restaurant:store-cm' restaurant.lid %}" target="_blank" class="btn btn-sm btn-primary me-2">Visit Site</a>
+                                    <a href="" target="_blank" class="btn btn-sm btn-primary me-2">Visit Site</a>
                                     <!--begin::Menu-->
                                     <div class="me-0">
                                         <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -383,12 +383,12 @@
                     <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="../../demo1/dist/account/overview.html">Menu</a>
+                            <a class="nav-link text-active-primary ms-0 me-10 py-5 active" href="{% url 'restaurant:restaurant' restaurant.lid %}">Menu</a>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->
                         <li class="nav-item mt-2">
-                            <a class="nav-link text-active-primary ms-0 me-10 py-5" href="../../demo1/dist/account/settings.html">Settings</a>
+                            <a class="nav-link text-active-primary ms-0 me-10 py-5" href="{% url 'restaurant:update_address' restaurant.lid %}">Address</a>
                         </li>
                         <!--end::Nav item-->
                         <!--begin::Nav item-->

@@ -8,6 +8,9 @@ from django.urls import reverse,reverse_lazy
 from django.contrib.auth.decorators import login_required
 from restaurant.models import *
 from restaurant.forms import *
+import requests
+from base64 import b64encode
+from django.views import View
 
 
 
@@ -180,6 +183,85 @@ def get_restaurant(request, lid):
     print(menus)
     return render(request, 'restaurant/restaurant/menu-list.html', {'restaurant': restaurant,'menus':menus})
 
+#List All Global Menus
+def menu_list_view(request):
+    menus = Menu.objects.all()
+    return render(request, 'restaurant/menu/menus.html', {'menus': menus})
+
+#Create Menu Globally
+def menu_create_view(request):
+    if request.method == 'POST':
+        form = MenuForm(request.POST)
+        if form.is_valid():
+            menu = form.save(commit=False)
+            menu.owner = request.user
+            menu.save()
+            form.save_m2m()
+            return redirect('menu_update', menuid=menu.menuid)
+    else:
+        form = MenuForm()
+    return render(request, 'restaurant/menu/menu-form.html', {'form': form})
+
+#Update Menu Globally
+def menu_update_view(request, menuid):
+    menu = get_object_or_404(Menu, menuid=menuid)
+    if request.method == "POST":
+        form = MenuForm(request.POST, instance=menu)
+        if form.is_valid():
+            form.save()
+            return redirect('menu_update', menuid=menu.menuid)
+    else:
+        form = MenuForm(instance=menu)
+    return render(request, 'restaurant/menu/menu-form.html', {'form': form})
+
+
+
+
+
+
+#--------------------------------------------------TEST---------------------------------------------#
+#WooCommerce Test - SUCCESS
+def fetch_products(request):
+    # Make a GET request to the WooCommerce API to retrieve a list of products
+    url = 'https://wa.biancouk.com/wp-json/wc/v3/products'
+    headers = {
+        'Authorization': 'Basic ' + b64encode(('ck_aca584ab9f02508a1ecfefe9020f7fa83e1ad079:cs_147ff37c0c4b41dae34d7cb749bd4d3af73dce69').encode()).decode()
+    }
+    response = requests.get(url, headers=headers)
+    products = response.json()
+    print(products)
+
+    # Render the list of products in a template
+    return render(request, 'restaurant/woo.html', {'products': products})
+
+
+def update_restaurant_address(request, lid):
+    restaurant = get_object_or_404(Restaurant, lid=lid)
+    if request.method == 'POST':
+        firstaddress = request.POST.get('firstaddress')
+        street = request.POST.get('street')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        zip_code = request.POST.get('zip_code')
+        address, created = Address.objects.get_or_create(
+        owner=request.user,
+        firstaddress=firstaddress,
+        street=street,
+        city=city,
+        state=state,
+        zip_code=zip_code
+        )
+        restaurant.address = address
+        restaurant.save()
+        return redirect('restaurant:update_address', lid)
+    else:
+        context = {'restaurant': restaurant,}
+        return render(request, 'restaurant/restaurant/address.html', context)
+    
+    
+    
+
+
 #Display all the products & categories for the ACTIVE MENU under one location
 def restaurant_menus(request, lid):
     restaurant = get_object_or_404(Restaurant, pk=lid)
@@ -268,9 +350,6 @@ def menu_detail(request, menuid):
     return render(request, 'restaurant/store/demo.html', context)
 
 
-def menu_list(request):
-    menus = Menu.objects.all()
-    return render(request, 'restaurant/restaurant/menu/menus.html', {'menus': menus})
 
 
 

@@ -76,11 +76,15 @@ class ModifierForm(forms.ModelForm):
         fields = ['name', 'price','modifiergroup',]
 
 class MenuForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control mb-2','placeholder':'Menu Name'}))
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple,required=False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'min-h-200px mb-2 form-control'}),required=False)
+    
     class Meta:
         model = Menu
         fields = ['name', 'description', 'category', 'is_active']
 
-    category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(),
-        widget=forms.CheckboxSelectMultiple,required=False)
+    
     

@@ -12,7 +12,7 @@
         </div>
         <!--end::Card title-->
         <!--begin::Action-->
-        <a href="{% url 'restaurant:menu-location' restaurant.lid %}" class="btn btn-sm btn-primary align-self-center">Create Menu</a>
+        <a href="" class="btn btn-sm btn-primary align-self-center">Create Menu</a>
         <!--end::Action-->
     </div>
     <!--begin::Card header-->
@@ -52,7 +52,7 @@
                             <!--end::Thumbnail-->
                             <div class="ms-5">
                                 <!--begin::Title-->
-                                <a href="{% url 'restaurant:menu-update-location' restaurant.lid menu.menuid %}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">{{menu.name}}</a>
+                                <a href="{% url 'restaurant:menu_update' menu.menuid %}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-category-filter="category_name">{{menu.name}}</a>
                                 <!--end::Title-->
                                 <!--begin::Description-->
                                 <div class="text-muted fs-7 fw-bold"></div>
