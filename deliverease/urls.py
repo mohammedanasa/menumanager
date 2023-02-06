@@ -1,8 +1,11 @@
 
 from django.contrib import admin
 import debug_toolbar
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-from django.urls import path,include
+from django.urls import path,include, re_path
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -21,6 +24,18 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
 router = DefaultRouter()
 router.register(r'menus', api_endpoint_views.MenuViewSet, basename='menu')
 
@@ -55,13 +70,14 @@ courier_urlpatterns = [
 restaurant_urlpatterns = [
     path('loc/', restaurant_views.restaurant_list, name="rest-list"),
     path('loc/<lid>/', restaurant_views.get_restaurant, name='restaurant'),
+    path('loc/<lid>/update-address/', restaurant_views.update_restaurant_address, name="update_address"),
+
     #----------------------------------------TEST------------------------------------------#
     #Create menu for a single restaurant
     #path('loc/<lid>/menu/', restaurant_views.create_menu_location, name='menu-location'),
     #Update menu for a location
     #path('loc/<lid>/<menuid>/update/', restaurant_views.update_menu, name='menu-update-location'),
 
-    path('loc/<lid>/update_address/', restaurant_views.update_restaurant_address, name="update_address"),
 
     path('product/', restaurant_views.create_or_update_product, name='create-product'),
     path('products/', restaurant_views.ProductList.as_view(), name='products'),
@@ -141,6 +157,11 @@ urlpatterns = [
     #Test
     path('test/', include(router.urls)),
     path('woo/',restaurant_views.fetch_products),
+    path('webhook/', restaurant_views.webhook_view, name='webhook'),
+
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     
 

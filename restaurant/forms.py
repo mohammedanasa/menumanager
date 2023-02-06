@@ -87,4 +87,7 @@ class MenuForm(forms.ModelForm):
         fields = ['name', 'description', 'category', 'is_active']
 
     
-    
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['firstaddress', 'street', 'city', 'state', 'zip_code']

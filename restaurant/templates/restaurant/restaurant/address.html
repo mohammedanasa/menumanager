@@ -7,24 +7,29 @@
     <div class="card-header cursor-pointer">
         <!--begin::Card title-->
         <div class="card-title m-0">
-            <h3 class="fw-bold m-0">Profile Details</h3>
+            <h3 class="fw-bold m-0">Address Details</h3>
         </div>
         <!--end::Card title-->
-        <!--begin::Action-->
-        <a href="../../demo1/dist/account/settings.html" class="btn btn-sm btn-primary align-self-center">Edit Profile</a>
-        <!--end::Action-->
+        
     </div>
     <!--begin::Card header-->
     <!--begin::Card body-->
     <div class="card-body p-9">
+        <form action="" method="POST">
+            {% csrf_token %}
+        
+            {{form.as_p}}
+            <button type="submit">Update Address</button>
+        </form>
         <!--begin::Row-->
         <div class="row mb-7">
             <!--begin::Label-->
-            <label class="col-lg-4 fw-semibold text-muted">Full Name</label>
+            <label class="col-lg-4 fw-semibold text-muted">First Address</label>
             <!--end::Label-->
+            
             <!--begin::Col-->
             <div class="col-lg-8">
-                <span class="fw-bold fs-6 text-gray-800">Max Smith</span>
+                <span class="fw-bold fs-6 text-gray-800">{{form.firsaddress}}</span>
             </div>
             <!--end::Col-->
         </div>
@@ -133,30 +138,7 @@
     </div>
     <!--end::Card body-->
 </div>
-<form action="" method="POST">
-    {% csrf_token %}
-    <div>
-      <label for="firstaddress">First Address:</label>
-      <input type="text" id="firstaddress" name="firstaddress" value="{{ address.firstaddress }}">
-    </div>
-    <div>
-      <label for="street">Street:</label>
-      <input type="text" id="street" name="street" value="{{ address.street }}">
-    </div>
-    <div>
-      <label for="city">City:</label>
-      <input type="text" id="city" name="city" value="{{ address.city }}">
-    </div>
-    <div>
-      <label for="state">State:</label>
-      <input type="text" id="state" name="state" value="{{ address.state }}">
-    </div>
-    <div>
-      <label for="zip_code">Zip Code:</label>
-      <input type="text" id="zip_code" name="zip_code" value="{{ address.zip_code }}">
-    </div>
-    <button type="submit">Update Address</button>
-  </form>
+  
   
 
 {% endblock %}

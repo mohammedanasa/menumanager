@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -9,8 +11,11 @@ from django.contrib.auth.decorators import login_required
 from restaurant.models import *
 from restaurant.forms import *
 import requests
+import base64
+import json
 from base64 import b64encode
 from django.views import View
+from urllib.parse import urlencode
 
 
 
@@ -168,6 +173,9 @@ class ModifierDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('restaurant:modifiers')
     template_name = 'restaurant/modifier/delete_modifier.html'
 
+
+#----------------------------------------RESTAURANT--------------------------------------#
+
 #List all the restaurants
 def restaurant_list(request):
     user = request.user
@@ -182,6 +190,28 @@ def get_restaurant(request, lid):
     menus = Menu.objects.filter(restaurant=restaurant)
     print(menus)
     return render(request, 'restaurant/restaurant/menu-list.html', {'restaurant': restaurant,'menus':menus})
+
+
+#create or update address
+def update_restaurant_address(request, lid):
+    restaurant = get_object_or_404(Restaurant, lid=lid)
+    address = restaurant.address
+    form = AddressForm(instance=address)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.owner = request.user
+            address.save()
+            restaurant.address = address
+            restaurant.save()
+            return redirect('restaurant:update_address', lid=restaurant.lid)
+        else:
+            form = AddressForm(instance=address)
+    return render(request, 'restaurant/restaurant/address.html', {'form': form})
+
+
+#-----------------------------------------------------MENU-------------------------------------#
 
 #List All Global Menus
 def menu_list_view(request):
@@ -209,7 +239,7 @@ def menu_update_view(request, menuid):
         form = MenuForm(request.POST, instance=menu)
         if form.is_valid():
             form.save()
-            return redirect('menu_update', menuid=menu.menuid)
+            return redirect('restaurant:menu_update', menuid=menu.menuid)
     else:
         form = MenuForm(instance=menu)
     return render(request, 'restaurant/menu/menu-form.html', {'form': form})
@@ -222,44 +252,46 @@ def menu_update_view(request, menuid):
 #--------------------------------------------------TEST---------------------------------------------#
 #WooCommerce Test - SUCCESS
 def fetch_products(request):
-    # Make a GET request to the WooCommerce API to retrieve a list of products
+
+    '''# Make a GET request to the WooCommerce API to retrieve a list of products
     url = 'https://wa.biancouk.com/wp-json/wc/v3/products'
+
+    # API credentials
+    consumer_key = "ck_aca584ab9f02508a1ecfefe9020f7fa83e1ad079".encode("utf-8")
+    consumer_secret = "cs_147ff37c0c4b41dae34d7cb749bd4d3af73dce69".encode("utf-8")'''
+
+    # Make a GET request to the WooCommerce API to retrieve a list of products
+    url = 'https://biancouk.co/wp-json/wc/v3/products'
+
+    # API credentials
+    consumer_key = "ck_3e0cc714929b9ce86ddc683fb8283d2c44e7b134".encode("utf-8")
+    consumer_secret = "cs_7531e791f346a099bc1f97b465d71a9f6639eeea".encode("utf-8")
+
+    
+    # API request headers
     headers = {
-        'Authorization': 'Basic ' + b64encode(('ck_aca584ab9f02508a1ecfefe9020f7fa83e1ad079:cs_147ff37c0c4b41dae34d7cb749bd4d3af73dce69').encode()).decode()
+        "Authorization": "Basic " + base64.b64encode(consumer_key + b":" + consumer_secret).decode("utf-8"),
+        "User-Agent": "MyApp/1.0",
+        "Accept": "application/json",
+        "Content-Type": "application/json"
     }
+    
     response = requests.get(url, headers=headers)
     products = response.json()
-    print(products)
 
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Display the product data
+        products = response.json()
+        print(json.dumps(products, indent=4))
+
+    else:
+        # Display an error message
+        print("Failed to retrieve product data. Response code:", response.status_code)
+        
     # Render the list of products in a template
     return render(request, 'restaurant/woo.html', {'products': products})
 
-
-def update_restaurant_address(request, lid):
-    restaurant = get_object_or_404(Restaurant, lid=lid)
-    if request.method == 'POST':
-        firstaddress = request.POST.get('firstaddress')
-        street = request.POST.get('street')
-        city = request.POST.get('city')
-        state = request.POST.get('state')
-        zip_code = request.POST.get('zip_code')
-        address, created = Address.objects.get_or_create(
-        owner=request.user,
-        firstaddress=firstaddress,
-        street=street,
-        city=city,
-        state=state,
-        zip_code=zip_code
-        )
-        restaurant.address = address
-        restaurant.save()
-        return redirect('restaurant:update_address', lid)
-    else:
-        context = {'restaurant': restaurant,}
-        return render(request, 'restaurant/restaurant/address.html', context)
-    
-    
-    
 
 
 #Display all the products & categories for the ACTIVE MENU under one location
@@ -348,6 +380,48 @@ def menu_detail(request, menuid):
         categories_data.append(category_data)
     context = {'categories_data': categories_data}
     return render(request, 'restaurant/store/demo.html', context)
+
+
+#TESTING ORDER RECIEVE WEBHOOK TEST SUCCESS
+from django.http import JsonResponse
+@csrf_exempt
+def webhook_view(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(data)
+
+        # Extract the relevant information from the data
+        customer_name = data.get("customer", {}).get("name")
+        customer_email = data.get("customer", {}).get("email")
+        delivery_address = data.get("deliveryAddress", {}).get("street")
+        payment_amount = data.get("payment", {}).get("amount")
+        items = data.get("items", [])
+        order_id = data.get("channelOrderId")
+        pickup_time = data.get("pickupTime")
+        # Store the order data in a dictionary
+        order_data = {
+            "customer_name": customer_name,
+            "order_id": order_id
+        }
+
+        # Print the order information
+        print("Order ID: ", order_id)
+        print("Customer Name: ", customer_name)
+        print("Customer Email: ", customer_email)
+        print("Delivery Address: ", delivery_address)
+        print("Payment Amount: ", payment_amount)
+        print("Pickup Time: ", pickup_time)
+        print("Items: ")
+        for item in items:
+            item_name = item.get("name")
+            item_price = item.get("price")
+            item_quantity = item.get("quantity")
+            print("\t", item_name, "-", item_quantity, "x", item_price)
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Invalid request method'})
+
+
+
 
 
 
