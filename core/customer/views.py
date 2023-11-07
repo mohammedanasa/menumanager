@@ -22,6 +22,9 @@ firebase_admin.initialize_app(cred)
 stripe.api_key = settings.STRIPE_API_SECRET_KEY
 
 @login_required()
+def customerHome(request):
+    return render(request,'customer/choose-service.html')
+
 def home(request):
     return redirect(reverse('customer:profile'))
     
@@ -231,7 +234,7 @@ def create_job_page(request):
 
 
 
-                    return redirect(reverse('customer:home'))
+                    return redirect(reverse('customer:dashboard'))
                 except stripe.error.CardError as e:
                     err = e.error
                     # Error code will be authentication_required if authentication is needed

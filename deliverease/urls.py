@@ -1,30 +1,53 @@
 
 from django.contrib import admin
 import debug_toolbar
-from django.urls import path,include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+from django.urls import path,include, re_path
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from core import views, consumers
 from django.views.generic import TemplateView
 
+from restaurant import views as restaurant_views
+from accounts import views as api_auth_views
+from api import views as api_endpoint_views
 from core.customer import views as customer_views
 from core.courier import views as courier_views, apis as courier_apis
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
+router = DefaultRouter()
+router.register(r'menus', api_endpoint_views.MenuViewSet, basename='menu')
 
 customer_urlpatterns = [
-    path('',customer_views.home, name='home'),
+    path('',customer_views.customerHome, name='dashboard'),
     path('profile/', customer_views.profile_page, name='profile'),
     path('payment-method/', customer_views.payment_method_page, name='payment-method'),
     path('create-job/', customer_views.create_job_page, name='create-job'),
 
     path('jobs/current/', customer_views.current_jobs_page, name='current-jobs'),
     path('jobs/archived/', customer_views.archived_jobs_page, name='archived-jobs'),
-    path('jobs/<job_id>/', customer_views.job_page, name='job'),
-
-
-
-
-    
+    path('jobs/<job_id>/', customer_views.job_page, name='job'),    
 ]
 
 courier_urlpatterns = [
@@ -44,10 +67,81 @@ courier_urlpatterns = [
 ]
 
 
+restaurant_urlpatterns = [
+    path('loc/', restaurant_views.restaurant_list, name="rest-list"),
+    path('loc/<lid>/', restaurant_views.get_restaurant, name='restaurant'),
+    path('loc/<lid>/update-address/', restaurant_views.update_restaurant_address, name="update_address"),
+
+    #----------------------------------------TEST------------------------------------------#
+    #Create menu for a single restaurant
+    #path('loc/<lid>/menu/', restaurant_views.create_menu_location, name='menu-location'),
+    #Update menu for a location
+    #path('loc/<lid>/<menuid>/update/', restaurant_views.update_menu, name='menu-update-location'),
+
+
+    path('product/', restaurant_views.create_or_update_product, name='create-product'),
+    path('products/', restaurant_views.ProductList.as_view(), name='products'),
+    path('product/<slug:pid>/', restaurant_views.create_or_update_product, name='update-product'),
+    path('product/delete-product/<slug:pid>/', restaurant_views.delete_product, name='delete-product'),
+
+    path('categories/', restaurant_views.CategoryList.as_view(), name='categories'),
+    path('category/', restaurant_views.create_or_update_category, name='create-category'),
+    path('category/<slug:cid>/', restaurant_views.create_or_update_category, name='update-category'),
+    path('category/delete-category/<slug:cid>/', restaurant_views.delete_category, name='delete-category'),
+
+    path('modifier-groups/', restaurant_views.MGList.as_view(), name='mgs'),
+    path('modifier-group/', restaurant_views.MGCreate.as_view(), name='create-mg'),
+    path('modifier-group/<slug>/', restaurant_views.MGUpdate.as_view(), name='update-mg'),
+    path('modifier-group/delete-modifier-group/<slug>/', restaurant_views.MGDelete.as_view(), name='delete-mg'),
+
+    path('modifiers/', restaurant_views.ModifierList.as_view(), name='modifiers'),
+    path('modifier/', restaurant_views.ModifierCreate.as_view(), name='create-modifier'),
+    path('modifier/<slug>/', restaurant_views.ModifierUpdate.as_view(), name='update-modifier'),
+    path('modifier/delete-modifier/<slug>/', restaurant_views.ModifierDelete.as_view(), name='delete-modifier'),
+
+    #Menu Global
+    path('menus/', restaurant_views.menu_list_view, name='menu_list'),
+    path('menu/create/', restaurant_views.menu_create_view, name='menu_create'),
+    path('menu/<uuid:menuid>/update/', restaurant_views.menu_update_view, name='menu_update'),
+    
+    #Not working
+
+    #----------------------------------------TESTING---------------------------------------------------#
+    #Create menu for a location
+    
+    #path('menus/', restaurant_views.menu_list, name='all-menus'),
+    #path('<lid>/store1/', restaurant_views.restaurant_menus, name='store-cm'),
+
+
+
+
+]
+
+api_urlpatterns = [
+
+    path("auth/signup/", api_auth_views.SignUpView.as_view(),name="signupapi"),
+    path("auth/signin/", api_auth_views.LoginViewAPI.as_view(),name="lognapi"),
+    path("auth/jwt/create/", TokenObtainPairView.as_view(),name="jwt"),
+    path("auth/jwt/refresh/", TokenRefreshView.as_view(),name="jwtrefresh"),
+    path("auth/jwt/verify/", TokenVerifyView.as_view(),name="jwtverify"),
+
+    path("category/",api_endpoint_views.CategoryListCreateView.as_view(), name="apicategory"), 
+    path("current-user/",api_endpoint_views.get_posts_for_current_user , name="apicategorycurrentuser"),  
+    path("menu/",api_endpoint_views.MenuViewSet, name="apicategory"), 
+
+
+
+
+
+
+
+]
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('social_django.urls', namespace='social')),
-    path('',views.home),
+    path('',restaurant_views.dashboard),
     path('firebase-messaging-sw.js', (TemplateView.as_view(template_name="firebase-messaging-sw.js", content_type= "application/javascript",))),
 
 
@@ -57,6 +151,28 @@ urlpatterns = [
 
     path('customer/', include((customer_urlpatterns, 'customer'))),
     path('courier/',include((courier_urlpatterns, 'courier'))),
+    path('restaurant/',include((restaurant_urlpatterns,'restaurant'))),
+    path('api/', include((api_urlpatterns, 'api'))),
+
+    #Test
+    path('test/', include(router.urls)),
+    path('woo/',restaurant_views.fetch_products),
+    path('webhook/', restaurant_views.webhook_view, name='webhook'),
+
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    
+
+
+
+
+
+    
+
+
+
 
     path('__debug__/', include(debug_toolbar.urls)),
     

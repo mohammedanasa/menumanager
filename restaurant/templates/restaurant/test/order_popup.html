@@ -1,0 +1,11 @@
+<div id="order-popup" style="display: none;">
+    <h2>New Order Received</h2>
+    <p>Order ID: {{ order_data.order_id }}</p>
+    <p>Customer Name: {{ order_data.customer_name }}</p>
+  </div>
+  
+  <script>
+    // Show the order popup
+    document.getElementById("order-popup").style.display = "block";
+  </script>
+  

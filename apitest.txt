@@ -1,0 +1,6 @@
+POST http://127.0.0.1:8000/api/category/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc0NTkwNzU3LCJpYXQiOjE2NzQ1ODM1NTcsImp0aSI6IjI2YWFhNjczOWZlNDRhNWQ4Y2FlYjI1ZGVhY2JkMDhiIiwidXNlcl9pZCI6MX0.n56XXNTSY4LWK7s2kD657cliEx2vQejGKuupReAjhI0
+{
+    "email":"jhondoe@gmail.com",
+    "password":"C@licut3"
+}
